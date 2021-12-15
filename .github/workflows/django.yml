@@ -5,10 +5,14 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        pyversion: ['3.5','3.8']
+        pg: ['10.8, 12]
 
     services:
       postgres:
-        image: postgres:10.8
+        image: postgres:${{matrix.pg}}
         env:
           POSTGRES_USER: decide
           POSTGRES_PASSWORD: decide
@@ -21,7 +25,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.8
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@${{matrix.pyversion}}
       with:
         python-version: 3.8
     - name: psycopg2 prerequisites
